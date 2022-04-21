@@ -13,6 +13,7 @@ import com.tapjoy.TJError;
 import com.tapjoy.TJGetCurrencyBalanceListener;
 import com.tapjoy.TJPlacement;
 import com.tapjoy.TJPlacementListener;
+import com.tapjoy.TJPrivacyPolicy;
 import com.tapjoy.TJSpendCurrencyListener;
 import com.tapjoy.Tapjoy;
 import com.tapjoy.TapjoyConnectFlag;
@@ -217,7 +218,25 @@ public class FlutterTapjoyPlugin implements FlutterPlugin, MethodCallHandler, Ac
             invokeMethod("onAwardCurrencyResponse",awardCurrencyResponse);
           }
         });
-
+        break;
+    case "setPrivacyPolicy":
+        final TJPrivacyPolicy tjPrivacyPolicy = Tapjoy.getPrivacyPolicy();
+        final Boolean subjectToGDPR = call.argument("subjectToGDPR");
+        if (subjectToGDPR != null) {
+            tjPrivacyPolicy.setSubjectToGDPR(subjectToGDPR);
+        }
+        final String userConsent = call.argument("userConsent");
+        if (userConsent != null) {
+            tjPrivacyPolicy.setUserConsent(userConsent);
+        }
+        final Boolean belowConsentAge = call.argument("belowConsentAge");
+        if (belowConsentAge != null) {
+            tjPrivacyPolicy.setBelowConsentAge(belowConsentAge);
+        }
+        final String usPrivacy = call.argument("usPrivacy");
+        if (usPrivacy != null) {
+            tjPrivacyPolicy.setUSPrivacy(usPrivacy);
+        }
         break;
       default:
         result.notImplemented();
