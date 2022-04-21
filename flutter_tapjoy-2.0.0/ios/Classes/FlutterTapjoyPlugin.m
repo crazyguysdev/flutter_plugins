@@ -37,6 +37,12 @@ FlutterViewController* flutterViewController;
   } else if ([@"setUserID" isEqualToString:call.method]) {
       NSString *userID = dict[@"userID"];
       [Tapjoy setUserID:userID];
+  }  else if ([@"setPrivacyPolicy" isEqualToString:call.method]) {
+      TJPrivacyPolicy *privacyPolicy = [Tapjoy getPrivacyPolicy];
+      [privacyPolicy setSubjectToGDPR: dict[@"subjectToGDPR"]];
+      [privacyPolicy setUserConsent: dict[@"userConsent"]];
+      [privacyPolicy setBelowConsentAge: dict[@"belowConsentAge"]];
+      [privacyPolicy setUSPrivacy: dict[@"usPrivacy"]];
   } else if ([@"isConnected" isEqualToString:call.method]) {
       BOOL isConnected = [Tapjoy isConnected];
       if (isConnected) {

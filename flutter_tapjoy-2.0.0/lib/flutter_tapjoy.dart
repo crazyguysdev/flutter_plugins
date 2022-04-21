@@ -164,6 +164,18 @@ class TapJoyPlugin {
     return;
   }
 
+  /// set user ID
+  Future<void> setPrivacyPolicy(
+      {bool? subjectToGDPR, String? userConsent, bool? belowConsentAge, String? usPrivacy,}) async {
+    await _channel.invokeMethod('setPrivacyPolicy', <String, dynamic>{
+      'subjectToGDPR': subjectToGDPR,
+      'userConsent': userConsent,
+      'belowConsentAge': belowConsentAge,
+      'usPrivacy': usPrivacy,
+    });
+    return;
+  }
+
   Future<bool?> _createPlacement(TJPlacement tjPlacement) async {
     final result =
         await _channel.invokeMethod('createPlacement', <String, dynamic>{
