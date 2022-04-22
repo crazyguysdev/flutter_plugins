@@ -1,4 +1,5 @@
 #import "FlutterTapjoyPlugin.h"
+#import <AppTrackingTransparency/AppTrackingTransparency.h>
 
 @implementation FlutterTapjoyPlugin
 
@@ -30,10 +31,13 @@ FlutterViewController* flutterViewController;
     NSDictionary *dict = call.arguments;
     NSString *placementName = dict[@"placementName"];
   if ([@"connectTapJoy" isEqualToString:call.method]) {
+    [ATTrackingManager requestTrackingAuthorizationWithCompletionHandler:^(ATTrackingManagerAuthorizationStatus status) {
       NSString *apiKey = dict[@"iOSApiKey"];
       NSNumber *methodDebug = dict[@"debug"];
       [Tapjoy setDebugEnabled:methodDebug.boolValue];
       [Tapjoy connect:apiKey];
+      result(@YES);
+    }];
   } else if ([@"setUserID" isEqualToString:call.method]) {
       NSString *userID = dict[@"userID"];
       [Tapjoy setUserID:userID];
