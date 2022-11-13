@@ -41,12 +41,25 @@ FlutterViewController* flutterViewController;
   } else if ([@"setUserID" isEqualToString:call.method]) {
       NSString *userID = dict[@"userID"];
       [Tapjoy setUserID:userID];
+      result(@YES);
   }  else if ([@"setPrivacyPolicy" isEqualToString:call.method]) {
       TJPrivacyPolicy *privacyPolicy = [Tapjoy getPrivacyPolicy];
-      [privacyPolicy setSubjectToGDPR: dict[@"subjectToGDPR"]];
-      [privacyPolicy setUserConsent: dict[@"userConsent"]];
-      [privacyPolicy setBelowConsentAge: dict[@"belowConsentAge"]];
-      [privacyPolicy setUSPrivacy: dict[@"usPrivacy"]];
+      NSNumber *subjectToGDPRNumber = dict[@"subjectToGDPR"];
+      NSString *userConsent = dict[@"userConsent"];
+      NSNumber *belowConsentAgeNumber = dict[@"belowConsentAge"];
+      NSString *usPrivacy = dict[@"usPrivacy"];
+      bool subjectToGDPR = subjectToGDPRNumber.boolValue;
+      bool belowConsentAge = belowConsentAgeNumber.boolValue;
+
+      NSLog(@"Privacy Policy subjectToGDPR: %d", subjectToGDPR);
+      NSLog(@"Privacy Policy userConsent: %@", userConsent);
+      NSLog(@"Privacy Policy belowConsentAge: %d", belowConsentAge);
+      NSLog(@"Privacy Policy usPrivacy: %@", usPrivacy);
+      [privacyPolicy setSubjectToGDPR: subjectToGDPR];
+      [privacyPolicy setUserConsent: userConsent];
+      [privacyPolicy setBelowConsentAge: belowConsentAge];
+      [privacyPolicy setUSPrivacy: usPrivacy];
+      result(@YES);
   } else if ([@"isConnected" isEqualToString:call.method]) {
       BOOL isConnected = [Tapjoy isConnected];
       if (isConnected) {
@@ -56,6 +69,7 @@ FlutterViewController* flutterViewController;
       }
   } else if ([@"createPlacement" isEqualToString:call.method]) {
       [FlutterTapjoyPlugin addPlacement:placementName];
+      result(@YES);
   } else if ([@"requestContent" isEqualToString:call.method]) {
       TJPlacement *myPlacement = placements[placementName];
       if (myPlacement) {
@@ -65,6 +79,7 @@ FlutterViewController* flutterViewController;
           args = @{ @"error" : @"Placement Not Found, Please Add placement first",@"placementName":placementName};
           [tapJoyChannel invokeMethod:@"requestFail" arguments:args];
       }
+      result(@YES);
   } else if ([@"showPlacement" isEqualToString:call.method]) {
       TJPlacement *myPlacement = placements[placementName];
       [myPlacement showContentWithViewController:flutterViewController];
